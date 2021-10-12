@@ -104,24 +104,37 @@ class BarangController extends Controller
         
         // dd($request->all());
        
-        
-        $barang = Barangs::find($id);
-        $awal = $barang->gambar_buku;
-
-        $gambar_buku = $request->file('gambar_buku');
-        $request->gambar_buku->move(public_patch().'/foto', $awal);
-        // if ($request->hasFile('gambar_buku')) {
-        //     $barang->delete_image();
-        //     $image = $request->file('gambar_buku');
-        //     $name = rand(1000, 9999) . $image->getClientOriginalName();
-        //     $image->move('foto', $name);
-        //     $post->image = $name;
-        // }
-        // $barang->gambar_buku = $request->gambar_buku;
+         $barang = Barangs::find($id);
+        if($request->has('gambar_buku')){
         $barang->kode_barang = $request->kode_barang;
         $barang->nama_barang = $request->nama_barang;
         $barang->kategori_id = $request->kategori_id;
-        $barang->gambar_buku = $awal;
+        $barang->pengarang = $request->pengarang;
+        $barang->penerbit = $request->penerbit;
+        $barang->tahun = $request->tahun;
+        $barang->isbn = $request->isbn;
+        if(isset($barang->gambar_buku)){
+        unlink("foto/" . $barang->gambar_buku);
+        $file = $request->file('gambar_buku');
+		$gambar_buku_path = time()."_".$file->getClientOriginalName();
+		$tujuan_upload = 'foto';
+		$file->move($tujuan_upload,$gambar_buku);
+        $barang->gambar_buku=$gambar_buku_path;
+        }else{
+        $file = $request->file('gambar_buku');
+		$gambar_buku_path = time()."_".$file->getClientOriginalName();
+		$tujuan_upload = 'foto';
+		$file->move($tujuan_upload,$gambar_buku);
+        }
+        $barang->harga_beli = $request->harga_beli;
+        $barang->harga_jual = $request->harga_jual;
+        $barang->gambar_buku=$gambar_buku_path;
+        $barang->stock = $request->stock;
+        $barang->save();
+        }else{
+        $barang->kode_barang = $request->kode_barang;
+        $barang->nama_barang = $request->nama_barang;
+        $barang->kategori_id = $request->kategori_id;
         $barang->pengarang = $request->pengarang;
         $barang->penerbit = $request->penerbit;
         $barang->tahun = $request->tahun;
@@ -130,6 +143,7 @@ class BarangController extends Controller
         $barang->harga_jual = $request->harga_jual;
         $barang->stock = $request->stock;
         $barang->save();
+        }
         return redirect()->route('barang_index')->with('success', 'Data berhasil Di Update');
         
     }

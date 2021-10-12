@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\SupplierController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,3 +42,10 @@ Route::get('/detail_barang/{id}', [BarangController::class,'detail_barang'])->na
 Route::get('/edit_barang/{id}', [BarangController::class,'edit'])->name('edit_barang');
 Route::put('/update_barang/{id}', [BarangController::class,'update'])->name('update_barang');
 
+// supplier
+Route::get('/supplier_index', [SupplierController::class,'index'])->name('supplier_index');
+Route::get('/create_supplier', [SupplierController::class,'create'])->name('supplier_create');
+Route::post('/tambah_supplier', [SupplierController::class,'tambah_supplier'])->name('tambah_supplier');
+Route::delete('/hapus_supplier/{id}', [SupplierController::class,'destroy'])->name('hapus_supplier');
+Route::get('/edit_supplier/{id}', [SupplierController::class,'edit'])->name('edit_supplier');
+Route::put('/update_supplier/{id}', [SupplierController::class,'update'])->name('update_supplier');
